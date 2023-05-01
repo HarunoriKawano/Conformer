@@ -5,5 +5,8 @@
   "conv_depthwise_kernel_size": 31,
   "max_source_positions": 10000,
   "num_hidden_layers": 16,
-  "mel_filter_size": 80
+  "mel_filter_size": 80,
+  "freq_mask_param": 27,
+  "time_mask_param": 10,
+  "time_mask_ratio": 0.05
 }
