@@ -8,5 +8,9 @@
   "mel_filter_size": 80,
   "freq_mask_param": 27,
   "time_mask_param": 10,
-  "time_mask_ratio": 0.05
+  "time_mask_ratio": 0.05,
+  "resample_rate": 16000,
+  "win_time": 0.025,
+  "stride_time": 0.01,
+  "n_fft": 2048
 }
