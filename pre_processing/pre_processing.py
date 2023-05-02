@@ -25,7 +25,7 @@ class ConformerPreProcessing:
 
         self.spec_aug = spec_aug
         self.freq_masking = FrequencyMasking(config.freq_mask_param)
-        self.time_masking = TimeMasking(config.time_mask_param, p=config.time_mask_ratio)
+        self.time_masking = TimeMasking(config.time_mask_param, iid_masks=True, p=config.time_mask_ratio)
 
     def __call__(self, inputs: torch.Tensor, sample_rate=16000):
         if sample_rate != self.config.resample_rate:
