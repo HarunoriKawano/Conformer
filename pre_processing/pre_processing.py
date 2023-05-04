@@ -7,7 +7,7 @@ from pre_processing import PreProcessingConfig
 
 
 class ConformerPreProcessing:
-    def __init__(self, config: PreProcessingConfig, sample_rate: int = 16000, spec_aug: bool = True):
+    def __init__(self, config: PreProcessingConfig, sample_rate: int = 16000, should_spec_aug: bool = True):
         self.config: PreProcessingConfig = config
         self.win_length = int(config.resample_rate * config.win_time)
         self.hop_length = int(config.resample_rate * config.stride_time)
@@ -23,14 +23,14 @@ class ConformerPreProcessing:
             n_mels=config.mel_filter_size
         )
 
-        self.spec_aug = spec_aug
-        self.freq_masking = FrequencyMasking(config.freq_mask_param)
-        self.time_masking = TimeMasking(config.time_mask_param, iid_masks=True, p=config.time_mask_ratio)
+        self.should_spec_aug = should_spec_aug
+        self.freq_masking = FrequencyMasking(config.freq_mask_length)
+        self.time_masking = TimeMasking(config.time_mask_length, iid_masks=True, p=config.time_mask_prop)
 
     def __call__(self, inputs: torch.Tensor, sample_rate=16000):
         """
         Args:
-            inputs (torch.Tensor): with shape `(B, T)` or (T)
+            inputs (torch.Tensor): with shape `(B, T)` or `(T)`
             sample_rate: (int): input sample rate.
 
         Returns:
@@ -44,7 +44,7 @@ class ConformerPreProcessing:
 
         mel_feature = self.mel_sampler(inputs)
 
-        if self.spec_aug:
+        if self.should_spec_aug:
             mel_feature = self.freq_masking(mel_feature)
             mel_feature = self.time_masking(mel_feature)
 
