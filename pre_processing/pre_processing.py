@@ -27,14 +27,14 @@ class ConformerPreProcessing:
         self.freq_masking = FrequencyMasking(config.freq_mask_length)
         self.time_masking = TimeMasking(config.time_mask_length, iid_masks=True, p=config.time_mask_prop)
 
-    def __call__(self, inputs: torch.Tensor, sample_rate=16000):
+    def __call__(self, inputs: torch.Tensor, sample_rate=16000) -> torch.Tensor:
         """
         Args:
-            inputs (torch.Tensor): with shape `(B, T)` or `(T)`
-            sample_rate: (int): input sample rate.
+            inputs (torch.Tensor): with shape `(T)` or `(B, T)`
+            sample_rate: (int): input sampling rate.
 
         Returns:
-            torch.Tensor: with shape `(B, T, D)` or `(T, D)`
+            torch.Tensor with shape `(T, D)` or `(B, T, D)`
 
         """
         if sample_rate != self.config.resample_rate:

@@ -20,7 +20,7 @@ class SelfAttentionModule(nn.Module):
             hidden_states: torch.Tensor,
             position_embeddings: torch.Tensor,
             attention_mask: Optional[torch.Tensor] = None
-    ):
+    ) -> torch.Tensor:
         """
         Args:
             hidden_states (torch.Tensor): with shape `(B, L, D)`
@@ -28,7 +28,7 @@ class SelfAttentionModule(nn.Module):
             attention_mask (torch.Tensor): with shape `(B, L)`
 
         Returns:
-            torch.Tensor: with shape`(B, L, D)`
+            torch.Tensor with shape`(B, L, D)`
         """
         hidden_states = self.layer_norm(hidden_states)
         hidden_states = self.self_attn(
@@ -61,7 +61,7 @@ class MultiHeadSelfAttentionWithRelativePosition(nn.Module):
             hidden_states: torch.Tensor,
             position_embeddings: torch.Tensor,
             attention_mask: Optional[torch.Tensor] = None
-    ):
+    ) -> torch.Tensor:
         """
         Args:
             hidden_states (torch.Tensor): with shape `(B, L, D)`
@@ -69,7 +69,7 @@ class MultiHeadSelfAttentionWithRelativePosition(nn.Module):
             attention_mask (torch.Tensor): with shape `(B, L)`
 
         Returns:
-            torch.Tensor: with shape`(B, L, D)`
+            torch.Tensor with shape`(B, L, D)`
         """
         batch_size, sequence_length, hidden_size = hidden_states.size()
 
@@ -105,7 +105,7 @@ class MultiHeadSelfAttentionWithRelativePosition(nn.Module):
             query: torch.Tensor,
             key: torch.Tensor,
             relative_position_embeddings: torch.Tensor
-    ):
+    ) -> torch.Tensor:
         """
         Calculate attention weight with relative position by Skew algorythm.
 
@@ -115,7 +115,7 @@ class MultiHeadSelfAttentionWithRelativePosition(nn.Module):
             relative_position_embeddings (torch.Tensor): with shape `(B, L, D)`
 
         Returns:
-            torch.Tensor: with shape `(B, H, L, L)`
+            torch.Tensor with shape `(B, H, L, L)`
 
         """
 
@@ -164,7 +164,6 @@ class PositionalEncoder(nn.Module):
         """
         max_length = hidden_states.size(1)
         position_ids = torch.arange(0, max_length, 1).to(hidden_states.device).flip(dims=[0])
-        print(position_ids)
         position_embeddings = self.position_encoder(position_ids).unsqueeze(0)
 
         return position_embeddings
