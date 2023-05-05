@@ -112,7 +112,7 @@ class MultiHeadSelfAttentionWithRelativePosition(nn.Module):
         Args:
             query (torch.Tensor): with shape `(B, H, L, D/H)`
             key: (torch.Tensor): with shape `(B, H, L, D/H)`
-            relative_position_embeddings (torch.Tensor): with shape `(B, L, D)`
+            relative_position_embeddings (torch.Tensor): with shape `(1, L, D)`
 
         Returns:
             torch.Tensor with shape `(B, H, L, L)`

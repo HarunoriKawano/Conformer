@@ -2,7 +2,7 @@
   "hidden_size": 144,
   "intermediate_size": 564,
   "num_attention_heads": 4,
-  "conv_depthwise_kernel_size": 31,
+  "conv_depth_wise_kernel_size": 31,
   "max_source_positions": 10000,
   "num_hidden_layers": 16,
   "mel_filter_size": 80,

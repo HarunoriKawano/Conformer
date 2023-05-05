@@ -17,7 +17,15 @@ class ConformerEncoder(nn.Module):
         self.positional_encoder = PositionalEncoder(config)
         self.layers = nn.ModuleList([ConformerBlock(config) for _ in range(config.num_hidden_layers)])
 
-    def forward(self, hidden_states: torch.Tensor, attention_mask: Optional[torch.Tensor]):
+    def forward(self, hidden_states: torch.Tensor, attention_mask: Optional[torch.Tensor] = None) -> torch.Tensor:
+        """
+        Args:
+            hidden_states (torch.Tensor): with shape `(B, L, D)`
+            attention_mask (torch.Tensor): with shape `(B, L)`
+
+        Returns:
+            torch.Tensor with shape `(B, L, D)`
+        """
         hidden_states = self.linear(hidden_states)
         hidden_states = self.dropout(hidden_states)
 

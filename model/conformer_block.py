@@ -22,11 +22,23 @@ class ConformerBlock(nn.Module):
         hidden_states: torch.Tensor,
         position_embeddings: torch.Tensor,
         attention_mask: Optional[torch.Tensor] = None
-    ):
+    ) -> torch.Tensor:
+        """
+        Args:
+            hidden_states (torch.Tensor): with shape `(B, L, D)`
+            position_embeddings (torch.Tensor): with shape `(1, L, D)`
+            attention_mask: (torch.Tensor): with shape `(B, L)`
+
+        Returns:
+            torch.Tensor with shape `(B, L, D)`
+        """
+
+        # Feed forward1
         residual = hidden_states
         hidden_states = self.ffn1(hidden_states)
         hidden_states = hidden_states * 0.5 + residual
 
+        # Convolution Module
         residual = hidden_states
         hidden_states = self.self_attn(
             hidden_states=hidden_states,
@@ -36,10 +48,12 @@ class ConformerBlock(nn.Module):
         )
         hidden_states = hidden_states + residual
 
+        # Self-attention Module
         residual = hidden_states
         hidden_states = self.conv_module(hidden_states)
         hidden_states = residual + hidden_states
 
+        # Feed forward2
         residual = hidden_states
         hidden_states = self.ffn2(hidden_states)
         hidden_states = hidden_states * 0.5 + residual
@@ -66,9 +80,9 @@ class ConvolutionModule(nn.Module):
         self.depth_wise_conv = nn.Conv1d(
             config.hidden_size,
             config.hidden_size,
-            config.conv_depthwise_kernel_size,
+            config.conv_depth_wise_kernel_size,
             stride=1,
-            padding=(config.conv_depthwise_kernel_size - 1) // 2,
+            padding=(config.conv_depth_wise_kernel_size - 1) // 2,
             groups=config.hidden_size,
             bias=False
         )
@@ -85,7 +99,15 @@ class ConvolutionModule(nn.Module):
         )
         self.dropout = nn.Dropout(p=0.1)
 
-    def forward(self, hidden_states: torch.Tensor):
+    def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            hidden_states (torch.Tensor): with shape `(B, L, D)`
+
+        Returns:
+            torch.Tensor with shape `(B, L, D)`
+        """
+
         hidden_states = self.layer_norm(hidden_states)
         hidden_states = hidden_states.transpose(1, 2)
 
@@ -114,7 +136,15 @@ class FeedForward(nn.Module):
         self.output_dense = nn.Linear(config.intermediate_size, config.hidden_size)
         self.output_dropout = nn.Dropout(p=0.1)
 
-    def forward(self, hidden_states: torch.Tensor):
+    def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
+        """
+        Args:
+            hidden_states (torch.Tensor): with shape `(B, L, D)`
+
+        Returns:
+            torch.Tensor with shape`(B, L, D)`
+        """
+
         hidden_states = self.layer_norm(hidden_states)
         hidden_states = self.intermediate_dense(hidden_states)
         hidden_states = self.intermediate_act_fn(hidden_states)
