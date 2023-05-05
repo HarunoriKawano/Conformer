@@ -7,8 +7,15 @@ from pre_processing import PreProcessingConfig
 
 
 class ConformerPreProcessing:
-    def __init__(self, config: PreProcessingConfig, sample_rate: int = 16000, should_spec_aug: bool = True):
+    def __init__(
+        self,
+        config: PreProcessingConfig,
+        sample_rate: int = 16000,
+        should_spec_aug: bool = True,
+        noise_scale: float = 1e-4
+    ):
         self.config: PreProcessingConfig = config
+        self.noise_scale = noise_scale
         self.win_length = int(config.resample_rate * config.win_time)
         self.hop_length = int(config.resample_rate * config.stride_time)
         self.resampler: Optional[Resample] = None
@@ -42,15 +49,20 @@ class ConformerPreProcessing:
         elif self.resampler is not None:
             inputs = self.resampler(inputs)
 
+        # Add noise for log scaling
+        noise = torch.randn(inputs.size()) * self.noise_scale
+        inputs += noise
+
         mel_feature = self.mel_sampler(inputs)
+        log_mel_feature = mel_feature.log2()
 
         if self.should_spec_aug:
-            mel_feature = self.freq_masking(mel_feature)
-            mel_feature = self.time_masking(mel_feature)
+            log_mel_feature = self.freq_masking(log_mel_feature)
+            log_mel_feature = self.time_masking(log_mel_feature)
 
-        if mel_feature.dim() == 2:
-            mel_feature = mel_feature.transpose(0, 1)
+        if log_mel_feature.dim() == 2:
+            log_mel_feature = log_mel_feature.transpose(0, 1)
         else:
-            mel_feature = mel_feature.transpose(1, 2)
+            log_mel_feature = log_mel_feature.transpose(1, 2)
 
-        return mel_feature
+        return log_mel_feature
