@@ -12,10 +12,11 @@ class ConformerModel(nn.Module):
         self.subsampling_conv = ConvSubsampling(config)
         self.encoder = ConformerEncoder(config)
 
-    def forward(self, input_values: torch.Tensor) -> torch.Tensor:
+    def forward(self, input_values: torch.Tensor, input_lengths: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Args:
             input_values (torch.Tensor): with shape `(B, T, D1)`
+            input_lengths (torch.Tensor): with shape `(B)`
 
         Returns:
             tuple(
@@ -23,8 +24,8 @@ class ConformerModel(nn.Module):
             torch.Tensor with shape `(B)`
             )
         """
-        hidden_states = self.subsampling_conv(input_values)
+        hidden_states, input_lengths = self.subsampling_conv(input_values, input_lengths)
 
         hidden_states = self.encoder(hidden_states)
 
-        return hidden_states
+        return hidden_states, input_lengths

@@ -12,10 +12,11 @@ class ConvSubsampling(nn.Module):
         self.conv2 = nn.Conv2d(config.hidden_size, config.hidden_size, kernel_size=3, stride=2)
         self.activation2 = nn.ReLU()
 
-    def forward(self, input_values: torch.Tensor) -> torch.Tensor:
+    def forward(self, input_values: torch.Tensor, input_lengths: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Args:
             input_values (torch.Tensor): with shape `(B, T, D1)`
+            input_lengths (torch.Tensor): with shape `(B)`
 
         Returns:
             tuple(
@@ -34,4 +35,7 @@ class ConvSubsampling(nn.Module):
         hidden_states = hidden_states.permute(0, 2, 1, 3)
         outputs = hidden_states.contiguous().view(batch_size, sub_sampled_lengths, -1)
 
-        return outputs
+        input_lengths //= 4
+        input_lengths -= 1
+
+        return outputs, input_lengths

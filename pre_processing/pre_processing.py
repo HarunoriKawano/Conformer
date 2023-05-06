@@ -50,7 +50,7 @@ class ConformerPreProcessing:
             inputs = self.resampler(inputs)
 
         # Add noise for log scaling
-        noise = torch.randn(inputs.size()) * self.noise_scale
+        noise = torch.randn(inputs.size(), device=inputs.device) * self.noise_scale
         inputs += noise
 
         mel_feature = self.mel_sampler(inputs)
