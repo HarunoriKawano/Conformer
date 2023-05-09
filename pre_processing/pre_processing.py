@@ -38,7 +38,7 @@ class ConformerPreProcessing:
         """
         Args:
             inputs (torch.Tensor): with shape `(T)` or `(B, T)`
-            sample_rate: (int): input sampling rate.
+            sample_rate (int): input sampling rate.
 
         Returns:
             torch.Tensor with shape `(T, D)` or `(B, T, D)`
