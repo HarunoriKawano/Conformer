@@ -1,4 +1,5 @@
 matplotlib==3.7.1
+PySoundFile==0.9.0.post1
 --extra-index-url https://download.pytorch.org/whl/cu118
 torch
 torchvision

@@ -1,10 +1,9 @@
-import os
 import json
 
 import torch
-from torchaudio.datasets import LibriLightLimited
 from torch import nn
 from torch.nn.functional import log_softmax
+import torchaudio
 import matplotlib.pyplot as plt
 
 from config import Config
@@ -25,18 +24,12 @@ def plot_mel_spectrogram(wave, title=None, y_label="freq_bin", aspect="auto", x_
 
 
 if __name__ == '__main__':
-    test_data_path = "data"
-    os.makedirs(test_data_path, exist_ok=True)
-    test_dataset = LibriLightLimited(test_data_path, subset="10min", download=True)
+    wav, sr = torchaudio.load("example.wav")
 
     with open("config/middle_config.json", "r", encoding="utf-8") as f:
         config = Config(**json.load(f))
     pre_processor = ConformerPreProcessing(config)
     model = ConformerModel(config)
-
-    test_data = test_dataset[0]
-    wav = test_data[0]
-    sr = test_data[1]
 
     # wave to log_mel_spectrogram
     log_mel_spectrogram = pre_processor(wav, sr)
@@ -46,8 +39,8 @@ if __name__ == '__main__':
     out, input_lengths = model(log_mel_spectrogram, input_lengths)
 
     num_phonemes = 45
-    targets = torch.randint(1, num_phonemes, size=(1, 100))  # 0: blank
-    target_lengths = torch.tensor([100, ])
+    targets = torch.randint(1, num_phonemes, size=(1, 70))  # 0: blank
+    target_lengths = torch.tensor([70, ])
 
     out_linear = nn.Linear(out.size(-1), num_phonemes + 1)
     loss_func = nn.CTCLoss()
