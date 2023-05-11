@@ -1,5 +1,7 @@
 <h1 align="center">Conformer: Convolution-augmented Transformer for Speech Recognition</h1>
 
+***
+
 <br/>
 <p  align="center"> 
     <a href="https://arxiv.org/pdf/2005.08100.pdf">
@@ -15,10 +17,6 @@
           <img src="http://img.shields.io/badge/codestyle-PEP--8-informational"> 
      </a>
 </p>
-
-***
-
-
 
 ## Installation
   
