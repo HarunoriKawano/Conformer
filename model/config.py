@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class ConformerConfig:
+class Config:
     hidden_size: int  # Dimension of encoder hidden states (Default: 512)
     intermediate_size: int  # Dimension of feed forward hidden states (Default: 2048)
     num_attention_heads: int  # Number of self attention heads (Default: 8)

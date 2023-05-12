@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)
-class PreProcessingConfig:
+class Config:
     mel_filter_size: int  # Number of mel filter banks. (Default: 80)
     freq_mask_length: int  # Maximum possible length of freq mask. (Default: 27)
     time_mask_length: int  # Maximum possible length of time mask. (Default: 10)

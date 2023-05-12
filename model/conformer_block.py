@@ -3,12 +3,12 @@ from typing import Optional
 import torch
 from torch import nn
 
-from model.conformer_config import ConformerConfig
+from model.config import Config
 from model.self_attention import SelfAttentionModule
 
 
 class ConformerBlock(nn.Module):
-    def __init__(self, config: ConformerConfig):
+    def __init__(self, config: Config):
         super().__init__()
 
         self.ffn1 = FeedForward(config)
@@ -64,7 +64,7 @@ class ConformerBlock(nn.Module):
 
 
 class ConvolutionModule(nn.Module):
-    def __init__(self, config: ConformerConfig):
+    def __init__(self, config: Config):
         super().__init__()
         self.layer_norm = nn.LayerNorm(config.hidden_size)
         self.point_wise_conv1 = nn.Conv1d(
@@ -126,7 +126,7 @@ class ConvolutionModule(nn.Module):
 
 
 class FeedForward(nn.Module):
-    def __init__(self, config: ConformerConfig):
+    def __init__(self, config: Config):
         super().__init__()
         self.layer_norm = nn.LayerNorm(config.hidden_size)
         self.intermediate_dense = nn.Linear(config.hidden_size, config.intermediate_size)

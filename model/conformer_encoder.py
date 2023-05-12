@@ -4,12 +4,12 @@ import math
 from typing import Optional
 
 from model.conformer_block import ConformerBlock
-from model.conformer_config import ConformerConfig
+from model.config import Config
 from model.self_attention import PositionalEncoder
 
 
 class ConformerEncoder(nn.Module):
-    def __init__(self, config: ConformerConfig):
+    def __init__(self, config: Config):
         super().__init__()
 
         self.linear = nn.Linear(config.hidden_size * (((config.mel_filter_size - 1) // 2 - 1) // 2), config.hidden_size)

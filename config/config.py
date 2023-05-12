@@ -1,9 +1,9 @@
 from dataclasses import dataclass
 
-from model import ConformerConfig
-from pre_processing import PreProcessingConfig
+from model import Config as Wav2vec2Config
+from pre_processing import Config as PreProcessingConfig
 
 
 @dataclass(frozen=True)
-class Config(ConformerConfig, PreProcessingConfig):
+class Config(Wav2vec2Config, PreProcessingConfig):
     pass

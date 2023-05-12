@@ -3,18 +3,18 @@ from torchaudio.transforms import MelSpectrogram, Resample, TimeMasking, Frequen
 from torchaudio.functional import resample
 from typing import Optional
 
-from pre_processing import PreProcessingConfig
+from pre_processing import Config
 
 
 class ConformerPreProcessing:
     def __init__(
         self,
-        config: PreProcessingConfig,
+        config: Config,
         sample_rate: int = 16000,
         should_spec_aug: bool = True,
         noise_scale: float = 1e-4
     ):
-        self.config: PreProcessingConfig = config
+        self.config: Config = config
         self.noise_scale = noise_scale
         self.win_length = int(config.resample_rate * config.win_time)
         self.hop_length = int(config.resample_rate * config.stride_time)

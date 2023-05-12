@@ -4,11 +4,11 @@ import math
 import torch
 from torch import nn
 
-from model.conformer_config import ConformerConfig
+from model.config import Config
 
 
 class SelfAttentionModule(nn.Module):
-    def __init__(self, config: ConformerConfig):
+    def __init__(self, config: Config):
         super().__init__()
 
         self.layer_norm = nn.LayerNorm(config.hidden_size)
@@ -40,7 +40,7 @@ class SelfAttentionModule(nn.Module):
 
 
 class MultiHeadSelfAttentionWithRelativePosition(nn.Module):
-    def __init__(self, config: ConformerConfig):
+    def __init__(self, config: Config):
         super().__init__()
         self.head_size = config.hidden_size // config.num_attention_heads
         self.num_heads = config.num_attention_heads
@@ -150,7 +150,7 @@ class MultiHeadSelfAttentionWithRelativePosition(nn.Module):
 
 class PositionalEncoder(nn.Module):
 
-    def __init__(self, config: ConformerConfig):
+    def __init__(self, config: Config):
         super().__init__()
         self.position_encoder = nn.Embedding(config.max_source_positions, config.hidden_size)
 

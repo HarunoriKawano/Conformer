@@ -1,13 +1,13 @@
 import torch
 from torch import nn
 
-from model.conformer_config import ConformerConfig
+from model.config import Config
 from model.conformer_encoder import ConformerEncoder
 from model.conformer_subsampling import ConvSubsampling
 
 
 class ConformerModel(nn.Module):
-    def __init__(self, config: ConformerConfig):
+    def __init__(self, config: Config):
         super().__init__()
         self.subsampling_conv = ConvSubsampling(config)
         self.encoder = ConformerEncoder(config)

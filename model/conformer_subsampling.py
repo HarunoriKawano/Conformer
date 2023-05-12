@@ -1,11 +1,11 @@
 import torch
 from torch import nn
 
-from model.conformer_config import ConformerConfig
+from model.config import Config
 
 
 class ConvSubsampling(nn.Module):
-    def __init__(self, config: ConformerConfig):
+    def __init__(self, config: Config):
         super().__init__()
         self.conv1 = nn.Conv2d(1, config.hidden_size, kernel_size=3, stride=2)
         self.activation1 = nn.ReLU()
