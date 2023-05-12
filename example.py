@@ -24,30 +24,33 @@ def plot_mel_spectrogram(wave, title=None, y_label="freq_bin", aspect="auto", x_
 
 
 if __name__ == '__main__':
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    print(f"Use device: {device}")
+
     wav, sr = torchaudio.load("example.wav")
 
     with open("config/middle_config.json", "r", encoding="utf-8") as f:
         config = Config(**json.load(f))
     pre_processor = ConformerPreProcessing(config)
-    model = ConformerModel(config)
+    model = ConformerModel(config).to(device)
 
     # wave to log_mel_spectrogram
     log_mel_spectrogram = pre_processor(wav, sr)
     plot_mel_spectrogram(log_mel_spectrogram[0])
     input_lengths = torch.tensor([log_mel_spectrogram.size(1)], dtype=torch.long)
 
-    out, input_lengths = model(log_mel_spectrogram, input_lengths)
+    out, input_lengths = model(log_mel_spectrogram.to(device), input_lengths.to(device))
 
     num_phonemes = 45
-    targets = torch.randint(1, num_phonemes, size=(1, 70))  # 0: blank
-    target_lengths = torch.tensor([70, ])
+    targets = torch.randint(1, num_phonemes, size=(1, 70)).to(device)  # 0: blank
+    target_lengths = torch.tensor([70, ]).to(device)
 
-    out_linear = nn.Linear(out.size(-1), num_phonemes + 1)
-    loss_func = nn.CTCLoss()
+    out_linear = nn.Linear(out.size(-1), num_phonemes + 1).to(device)
+    criterion = nn.CTCLoss()
 
     # `(B, L, D)` -> `(L, B, N)`
     probs = log_softmax(out_linear(out).transpose(0, 1), dim=-1)
 
-    loss = loss_func(probs, targets, input_lengths, target_lengths)
+    loss = criterion(probs, targets, input_lengths, target_lengths)
     print(loss)
     loss.backward()
