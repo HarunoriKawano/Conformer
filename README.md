@@ -23,6 +23,8 @@
 
 ***
 
+#### Implement of "Conformer: Convolution-augmented Transformer for Speech Recognition" using PyTorch
+
 ## Overview
 <!-- https://github.com/HarunoriKawano/Conformer/blob/main/docs/overview.png -->
 <div align="left">
