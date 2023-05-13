@@ -1,31 +1,41 @@
-<h1 align="center">Conformer: Convolution-augmented Transformer for Speech Recognition</h1>
+<img src="docs/title.png" width="100%">
 
 <br/>
-<p  align="center"> 
+ <div align="center">
     <a href="https://arxiv.org/pdf/2005.08100.pdf">
-          <img src="http://img.shields.io/badge/model-Conformer-red"> 
+        <img src="https://img.shields.io/badge/model-Conformer-red"> 
      </a>
      <a href="https://github.com/HarunoriKawano/Conformer/blob/main/LICENSE">
-          <img src="https://img.shields.io/badge/license-Apache--2.0-informational"> 
+        <img src="https://img.shields.io/badge/license-Apache--2.0-informational"> 
      </a>
      <a href="https://github.com/pytorch/pytorch">
-          <img src="https://img.shields.io/badge/framework-PyTorch-informational"> 
+        <img src="https://img.shields.io/badge/framework-PyTorch-informational"> 
      </a>
      <a href="https://www.python.org/dev/peps/pep-0008/">
-          <img src="http://img.shields.io/badge/codestyle-PEP--8-informational"> 
+        <img src="https://img.shields.io/badge/codestyle-PEP--8-informational"> 
      </a>
-</p>
+    <a href="https://github.com/HarunoriKawano/Conformer">
+        <img src="https://img.shields.io/badge/build-passing-success"> 
+    </a>
+</div>
 
 ***
+
+## Overview
+<!-- https://github.com/HarunoriKawano/Conformer/blob/main/docs/overview.png -->
+<div align="left">
+    <img src="docs/overview.png" width="600px" >
+</div>
 
 ## Installation
   
 ```
-pip install -r requirements.txt
+pip install -r requirements.txt  
 ```
 
 ## Usage
 
+Described in example.py
 ```
 python example.py
 ```
@@ -38,4 +48,4 @@ I follow [PEP-8](https://www.python.org/dev/peps/pep-0008/) for code style. Espe
   
 ## Author
   
-* Harunori Kawano: [@Portfolio Site](https://harunorikawano.github.io/)
+* [Harunori Kawano](https://harunorikawano.github.io/)
