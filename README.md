@@ -1,4 +1,6 @@
-<img src="docs/title.png" width="100%">
+<div align="center">
+    <img src="docs/title.png" width="800px">
+</div>
 
 <br/>
  <div align="center">
