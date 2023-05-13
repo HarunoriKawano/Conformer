@@ -1,21 +1,21 @@
 <div align="center">
-    <img src="docs/title.png" width="800px">
+    <img src="https://github.com/HarunoriKawano/Conformer/blob/main/docs/title.png" width="800px">
 </div>
 
 <br/>
  <div align="center">
     <a href="https://arxiv.org/pdf/2005.08100.pdf">
-        <img src="https://img.shields.io/badge/model-Conformer-red"> 
-     </a>
-     <a href="https://github.com/HarunoriKawano/Conformer/blob/main/LICENSE">
+        <img src="https://img.shields.io/badge/model-Conformer-orange"> 
+    </a>
+    <a href="https://github.com/pytorch/pytorch">
+        <img src="https://img.shields.io/badge/framework-PyTorch-red"> 
+    </a>
+    <a href="https://github.com/HarunoriKawano/Conformer/blob/main/LICENSE">
         <img src="https://img.shields.io/badge/license-Apache--2.0-informational"> 
-     </a>
-     <a href="https://github.com/pytorch/pytorch">
-        <img src="https://img.shields.io/badge/framework-PyTorch-informational"> 
-     </a>
-     <a href="https://www.python.org/dev/peps/pep-0008/">
+    </a>
+    <a href="https://www.python.org/dev/peps/pep-0008/">
         <img src="https://img.shields.io/badge/codestyle-PEP--8-informational"> 
-     </a>
+    </a>
     <a href="https://github.com/HarunoriKawano/Conformer">
         <img src="https://img.shields.io/badge/build-passing-success"> 
     </a>
@@ -23,12 +23,9 @@
 
 ***
 
-#### Implement of "Conformer: Convolution-augmented Transformer for Speech Recognition" using PyTorch
-
 ## Overview
-<!-- https://github.com/HarunoriKawano/Conformer/blob/main/docs/overview.png -->
 <div align="left">
-    <img src="docs/overview.png" width="600px" >
+    <img src="https://github.com/HarunoriKawano/Conformer/blob/main/docs/overview.png" width="600px" >
 </div>
 
 ## Installation
