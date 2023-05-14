@@ -24,7 +24,7 @@
 ***
 
 ## Overview
-<div align="left">
+<div align="center">
     <img src="https://github.com/HarunoriKawano/Conformer/blob/main/docs/overview.png" width="600px" >
 </div>
 
