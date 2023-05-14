@@ -4,7 +4,7 @@
 
 <br/>
  <div align="center">
-    <a href="https://arxiv.org/pdf/2005.08100.pdf">
+    <a href="https://arxiv.org/abs/2005.08100">
         <img src="https://img.shields.io/badge/model-Conformer-orange"> 
     </a>
     <a href="https://github.com/pytorch/pytorch">
@@ -45,7 +45,8 @@ python example.py
 I follow [PEP-8](https://www.python.org/dev/peps/pep-0008/) for code style. Especially the style of docstrings is important to generate documentation.  
   
 ## Reference
-- [Conformer: Convolution-augmented Transformer for Speech Recognition](https://arxiv.org/pdf/2005.08100.pdf)
+- [Conformer: Convolution-augmented Transformer for Speech Recognition](https://arxiv.org/abs/2005.08100)
+- [Self-Attention with Relative Position Representations](https://arxiv.org/abs/1803.02155)
   
 ## Author
   
