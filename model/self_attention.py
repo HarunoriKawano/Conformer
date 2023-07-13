@@ -3,7 +3,7 @@ import math
 
 import torch
 from torch import nn
-from torch.nn.init import xavier_uniform_, xavier_normal_
+from torch.nn.init import xavier_uniform_
 
 from model.config import Config
 
@@ -60,9 +60,6 @@ class MultiHeadSelfAttentionWithRelativePosition(nn.Module):
         xavier_uniform_(self.linear_q.weight)
         xavier_uniform_(self.linear_k.weight)
         xavier_uniform_(self.linear_v.weight)
-        xavier_normal_(self.linear_q.bias)
-        xavier_normal_(self.linear_k.bias)
-        xavier_normal_(self.linear_v.bias)
 
     def forward(
             self,
