@@ -117,20 +117,20 @@ class MultiHeadSelfAttentionWithRelativePosition(nn.Module):
         Args:
             query (torch.Tensor): with shape `(B, H, L, D/H)`
             key: (torch.Tensor): with shape `(B, H, L, D/H)`
-            relative_position_embeddings (torch.Tensor): with shape `(1, L, D)`
+            relative_position_embeddings (torch.Tensor): with shape `(L, L, D)`
 
         Returns:
             torch.Tensor with shape `(B, H, L, L)`
 
         """
 
-        # `(B, L, D)` -> `(B, H, D/H, L)`
+        # `(L, L, D)` -> `(H, L, L, D/H)`
         proj_relative_position_embeddings = self.linear_pos(relative_position_embeddings)
         proj_relative_position_embeddings = proj_relative_position_embeddings.view(
             relative_position_embeddings.size(0), -1, self.num_heads, self.head_size
         )
         proj_relative_position_embeddings = proj_relative_position_embeddings.transpose(1, 2)
-        proj_relative_position_embeddings = proj_relative_position_embeddings.transpose(2, 3)
+        proj_relative_position_embeddings = proj_relative_position_embeddings.transpose(0, 1)
 
         query = query.transpose(1, 2)
         q_with_bias_u = (query + self.pos_bias_u).transpose(1, 2)
@@ -138,37 +138,32 @@ class MultiHeadSelfAttentionWithRelativePosition(nn.Module):
 
         scores_ac = torch.matmul(q_with_bias_u, key.transpose(-2, -1))
 
-        scores_bd = torch.matmul(q_with_bias_v, proj_relative_position_embeddings)
-
-        # Skew algorythm
-        triangle_mask = torch.tril(torch.ones(scores_bd.shape, device=scores_bd.device)).flip(dims=[-1])
-        scores_bd = scores_bd.masked_fill(triangle_mask == 0, value=0)
-        padding = torch.zeros(scores_bd.size(0), scores_bd.size(1), scores_bd.size(2), 1, device=scores_bd.device)
-        scores_bd = torch.cat([padding, scores_bd], dim=-1)
-        scores_bd = scores_bd.view(scores_bd.size(0), scores_bd.size(1), scores_bd.size(3), scores_bd.size(2))
-        scores_bd = scores_bd[:, :, 1:]
+        scores_bd = (q_with_bias_v.unsqueeze(2) * proj_relative_position_embeddings.unsqueeze(0)).sum(-1)
 
         scores = (scores_ac + scores_bd) / math.sqrt(self.head_size)
 
         return scores
 
 
-class PositionalEncoder(nn.Module):
-
+class RelativePositionalEncoding(nn.Module):
     def __init__(self, config: Config):
         super().__init__()
-        self.position_encoder = nn.Embedding(config.max_source_positions, config.hidden_size)
+        self.positional_params = nn.Parameter(torch.randn(config.max_source_positions * 2 - 1, config.hidden_size))
+        self.max_length = config.max_source_positions
+        self.with_cls = config.with_cls
+        if config.with_cls:
+            self.cls_positional_embedding = nn.Parameter(torch.randn(config.hidden_size))
 
-    def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        """
-        Args:
-            hidden_states (torch.Tensor): with shape `(B, L, D)`
+    def forward(self, hidden_states: torch.Tensor):
+        input_length = hidden_states.size(1)
+        position_ids = torch.arange(input_length)
+        relative_position_matrix = position_ids[None, :] - position_ids[:, None]
+        relative_position_matrix = relative_position_matrix + self.max_length - 1
 
-        Returns:
-            torch.Tensor: with shape `(1, L, D)`
-        """
-        max_length = hidden_states.size(1)
-        position_ids = torch.arange(0, max_length, 1).to(hidden_states.device).flip(dims=[0])
-        position_embeddings = self.position_encoder(position_ids).unsqueeze(0)
+        relative_position_embeddings = self.positional_params[relative_position_matrix]
 
-        return position_embeddings
+        if self.with_cls:
+            relative_position_embeddings[0] = self.cls_positional_embedding
+            relative_position_embeddings[:, 0] = self.cls_positional_embedding
+
+        return relative_position_embeddings

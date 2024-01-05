@@ -5,7 +5,7 @@ from typing import Optional
 
 from model.conformer_block import ConformerBlock
 from model.config import Config
-from model.self_attention import PositionalEncoder
+from model.self_attention import RelativePositionalEncoding
 
 
 class ConformerEncoder(nn.Module):
@@ -14,7 +14,7 @@ class ConformerEncoder(nn.Module):
 
         self.linear = nn.Linear(config.hidden_size * (((config.mel_filter_size - 1) // 2 - 1) // 2), config.hidden_size)
         self.dropout = nn.Dropout(p=0.1)
-        self.positional_encoder = PositionalEncoder(config)
+        self.positional_encoder = RelativePositionalEncoding(config)
         self.layers = nn.ModuleList([ConformerBlock(config) for _ in range(config.num_hidden_layers)])
 
     def forward(self, hidden_states: torch.Tensor, attention_mask: Optional[torch.Tensor] = None) -> torch.Tensor:

@@ -10,3 +10,4 @@ class Config:
     num_hidden_layers: int  # Number of Conformer blocks (Default 17)
     max_source_positions: int  # Maximum input length of encoder (Default 10000)
     mel_filter_size: int  # Number of mel filter banks. (Default: 80)
+    with_cls: bool  # Weather with cls token or not

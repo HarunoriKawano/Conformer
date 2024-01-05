@@ -12,5 +12,6 @@
   "resample_rate": 16000,
   "win_time": 0.025,
   "stride_time": 0.01,
-  "n_fft": 2048
+  "n_fft": 2048,
+  "with_cls": true
 }
