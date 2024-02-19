@@ -150,9 +150,6 @@ class RelativePositionalEncoding(nn.Module):
         super().__init__()
         self.positional_params = nn.Parameter(torch.randn(config.max_source_positions * 2 - 1, config.hidden_size))
         self.max_length = config.max_source_positions
-        self.with_cls = config.with_cls
-        if config.with_cls:
-            self.cls_positional_embedding = nn.Parameter(torch.randn(config.hidden_size))
 
     def forward(self, hidden_states: torch.Tensor):
         input_length = hidden_states.size(1)
@@ -162,8 +159,23 @@ class RelativePositionalEncoding(nn.Module):
 
         relative_position_embeddings = self.positional_params[relative_position_matrix]
 
-        if self.with_cls:
-            relative_position_embeddings[0] = self.cls_positional_embedding
-            relative_position_embeddings[:, 0] = self.cls_positional_embedding
+        return relative_position_embeddings
+
+
+class RelativePositionalEncodingWithCLS(RelativePositionalEncoding):
+    def __init__(self, config: Config):
+        super().__init__(config)
+        self.cls_positional_embedding = nn.Parameter(torch.randn(config.hidden_size))
+
+    def forward(self, hidden_states: torch.Tensor):
+        input_length = hidden_states.size(1)
+        position_ids = torch.arange(input_length)
+        relative_position_matrix = position_ids[None, :] - position_ids[:, None]
+        relative_position_matrix = relative_position_matrix + self.max_length - 1
+
+        relative_position_embeddings = self.positional_params[relative_position_matrix]
+
+        relative_position_embeddings[0] = self.cls_positional_embedding
+        relative_position_embeddings[:, 0] = self.cls_positional_embedding
 
         return relative_position_embeddings
